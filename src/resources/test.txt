@@ -1,0 +1,3 @@
+That would allow the understanding of VMS (including some text sequences)
+by any type of driver within any
+international and/or multilingual area.
