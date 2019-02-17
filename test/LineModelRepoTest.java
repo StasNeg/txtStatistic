@@ -15,5 +15,6 @@ public class LineModelRepoTest {
         filerepository.saveOrUpdate(file);
         file = filerepository.getByName("newFile");
         Assert.assertEquals(java.util.Optional.of(1).get(), repository.saveOrUpdate(file.getId(), new FileLineModel(1, 2, 3, 4, 5, 6.2)));
+
     }
 }

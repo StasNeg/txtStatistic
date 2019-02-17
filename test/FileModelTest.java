@@ -1,5 +1,6 @@
 import com.text.model.FileModel;
 import com.text.repository.jdbcRepository.FileModelRepository;
+import com.text.repository.jdbcRepository.LineModelRepository;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -7,6 +8,7 @@ import org.junit.Test;
 
 public class FileModelTest {
     private static FileModelRepository repository = new FileModelRepository();
+    private static LineModelRepository linerepository = new LineModelRepository();
 
     @BeforeClass
     public static void beforeTest() {
