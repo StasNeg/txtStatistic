@@ -11,21 +11,26 @@ import static com.text.repository.memory.InMemoryStatisticStorage.getInMemorySto
 public class DataStoreService implements ProcessingServise {
     private final FileModelRepository fileRepository = new FileModelRepository();
     private final LineModelRepository lineModelRepository = new LineModelRepository();
+
     @Override
     public void process() {
-        if(getInMemoryStorage().isEmpty()){
+        if (getInMemoryStorage().isEmpty()) {
             System.out.println("Storage is empty");
             return;
         }
-        getInMemoryStorage().entrySet().forEach(entry->{
+        getInMemoryStorage().entrySet().forEach(entry -> {
             FileModel byName = fileRepository.getByName(entry.getKey());
-            if(byName==null){
+            if (byName == null) {
                 byName = new FileModel(entry.getKey());
                 fileRepository.saveOrUpdate(byName);
                 byName = fileRepository.getByName(entry.getKey());
             }
             final FileModel model = byName;
-            entry.getValue().forEach(line->lineModelRepository.saveOrUpdate(model.getId(),line));
+            if (entry.getValue().size() > 0 &&
+                    lineModelRepository.hasByFileIdAndLineNumber(model.getId(), entry.getValue().get(0).getLineNumber())) {
+                lineModelRepository.deleteByFileId(model.getId());
+            }
+            entry.getValue().forEach(line -> lineModelRepository.saveOrUpdate(model.getId(), line));
         });
         System.out.println("Data successfully saved");
     }
