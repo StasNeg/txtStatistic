@@ -16,7 +16,7 @@
 <div class="container">
     <!-- Trigger the modal with a button -->
     <!-- Modal -->
-    <div class="modal fade" tabindex="-1" id="editOrCreate" role="dialog">
+    <div class="modal fade" tabindex="-1" id="showStatistic" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -25,10 +25,14 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-                    <form id="validateFormSaveOrEdit" method="post" action="">
-                    </form>
+                    <div class="table-responsive">
+                        <table class="display" id="fileTableStatistic">
+                        </table>
+                    </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btnCancel" data-dismiss="modal" th:text="1"></button>
+                        <button type="button" class="btn btn-default btnCancel" data-dismiss="modal"
+                                th:text="Close"></button>
                     </div>
                 </div>
             </div>
@@ -36,10 +40,8 @@
     </div>
 </div>
 
-    <!-- /.container -->
-    <div th:replace="fragment/footer :: footer"></div>
-    <script type="application/javascript" th:src="@{/js/files.js}" defer></script>
-    <script type="application/javascript" th:src="@{/js/common.js}" defer></script>
-    <script type="application/javascript" th:src="@{/js/validateFiles.js}" defer></script>
+<!-- /.container -->
+<div th:replace="fragment/footer :: footer"></div>
+<script type="application/javascript" th:src="@{/js/files.js}" defer></script>
 </body>
 </html>

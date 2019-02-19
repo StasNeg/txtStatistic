@@ -1,85 +1,106 @@
 var basicUrl = 'http://localhost:8080';
-$(".btnDelete").click(function() {
-    console.log("Delete " +this.name);
-    $.ajax({
-        'type': 'DELETE',
-        'url': basicUrl + "/delete?id="+this.name,
-        'contentType': 'application/json',
-        'success': function(data, status){redirect(basicUrl);},
-        'error': function (xhr, status) {
-            alert(xhr.responseJSON.message);
-        }
-     });
-});
+var idFile;
+var tableStatistic;
 
-
-function edit(id) {
-    console.log("Edit " + id);
-    var currentCar = carsValue.filter(function(car){
-    return car.id === parseInt(id);});
-    currentCar = currentCar[0];
-    $('#idNumber').val(id);
-    $('#carNumber').val(currentCar.number);
-    $('#carType').val(currentCar.carType).change();
-    $('#carProducer').val(currentCar.producer).change();
-    $('#carName').append($("<option></option>").attr("value",currentCar.model)
-                                    .text(currentCar.model));
-    $('#carName').val(currentCar.model).change();
-    $('#carDescription').val(currentCar.description);
-}
-
-$('#editOrCreate').on('shown.bs.modal', function (e) {
-    resetValidation();
-})
-
-jQuery("#carProducer").change(function(){
-    var producer = jQuery('#carProducer').val();
-    $('#carName').children('option:not(:first)').remove();
-    if(producer==="0") {
-        return;
-    }
+$(document).ready(function () {
+    tableStatistic = null;
     $.ajax({
         'type': 'GET',
-        'url': basicUrl + "/model?producer="+producer,
+        'url': basicUrl + "/files",
         'contentType': 'application/json',
-        'success': function(data, status){
-            $.each(data, function(key, value) {
-            var options = $('#carName option')
-                .filter(function(i, e) { return $(e).text() === value});
-                 if(options.length===0){
-                    $('#carName').append($("<option></option>").attr("value",value).text(value));
-                }
-            });
+        'success': function (data, status) {
+            createFilesTable(data)
         },
         'error': function (xhr, status) {
             alert(xhr.responseJSON.message);
         }
- });
+    });
+
+
 });
 
-function saveOrEditCar() {
+$('#showStatistic').on('shown.bs.modal', function (e) {
     $.ajax({
-        'type': 'POST',
-        'url': basicUrl + "/save",
+        'type': 'GET',
+        'url': basicUrl + "/files/statistic/" + idFile,
         'contentType': 'application/json',
-        'data': JSON.stringify({
-            id: $('#idNumber').val(),
-            number: $('#carNumber').val(),
-            carType: $('#carType').val(),
-            model:$('#carName').val(),
-            producer:$('#carProducer').val(),
-            description:$('#carDescription').val()
-            }),
-        'dataType': 'json',
-        'success': function(data, status){
-            redirect(basicUrl);
+        'success': function (data) {
+
+            if (tableStatistic === null)
+                createStatisticTable(data);
+            else
+                tableStatistic.rows.add(data).draw();
         },
         'error': function (xhr, status) {
             alert(xhr.responseJSON.message);
         }
-     });
+    });
+});
+
+function createFilesTable(files) {
+    var table = $('#fileTable').DataTable({
+            data: files,
+            "columns": [
+                {
+                    "data": "id",
+                    "visible": false
+                },
+                {
+                    title: "Name of file",
+                    "data": "name"
+                },
+
+                {
+                    title: "Statistics",
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": '<button type="button" name = "btnStatistic" class="btn btn-primary btn-xs" data-title="Edit" ' +
+                        'data-toggle="modal" data-target="#showStatistic"> ' +
+                        '<span class="glyphicon glyphicon-pencil"></span> ' +
+                        '</button>'
+                }
+            ]
+        }
+    );
+    $('#fileTable tbody').on('click', '[name= "btnStatistic"]', function () {
+        var data = table.row($(this).parents('tr')).data();
+        idFile = data.id;
+    });
 }
 
-function redirect(url){
-    $(document).ready( function() {$( location ).attr("href", url);});
+function createStatisticTable(fileStatistic) {
+    tableStatistic = $('#fileTableStatistic').DataTable({
+            data: fileStatistic,
+            "columns": [
+                {
+                    "data": "id",
+                    "visible": false
+                },
+                {
+                    title: "Line number",
+                    "data": "lineNumber"
+                },
+                {
+                    title: "Longest word",
+                    "data": "longestWord"
+                },
+                {
+                    title: "Shortest word",
+                    "data": "shortersWord"
+                },
+                {
+                    title: "Line length",
+                    "data": "length"
+                },
+                {
+                    title: "Average Word Length",
+                    "data": "averageWordLength"
+                }
+            ]
+        }
+    );
 }
+
+$('#showStatistic').on('hidden.bs.modal', function () {
+    tableStatistic.clear();
+})

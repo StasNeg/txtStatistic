@@ -10,4 +10,5 @@ import java.util.List;
 public interface FileRepository extends CrudRepository<FileModel, Long> {
     @Override
     List<FileModel> findAll();
+
 }
