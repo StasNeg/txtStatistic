@@ -1,6 +1,7 @@
-package com.text.view;
+package com.text.view.item;
 
 import com.text.service.ProcessingServise;
+import com.text.view.ViewServise;
 
 public class MenuItem {
     private final String title;

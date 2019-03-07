@@ -37,9 +37,7 @@ public class ShowFromMemory implements ProcessingServise {
             }
         } else {
             if(map.size()>0) {
-                map.entrySet().forEach(entry -> {
-                    printEntry(entry.getKey(), entry.getValue());
-                });
+                map.forEach(this::printEntry);
             }else{
                 System.out.println("Storage is empty");
             }

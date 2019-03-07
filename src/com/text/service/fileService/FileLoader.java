@@ -18,8 +18,8 @@ import static java.util.stream.Collectors.toList;
 
 
 public class FileLoader implements ProcessingServise {
-    private InMemoryStatisticStorage storage = new InMemoryStatisticStorage();
-    boolean isFromDirectory;
+
+    private boolean isFromDirectory;
 
     public FileLoader() {
     }
@@ -57,7 +57,7 @@ public class FileLoader implements ProcessingServise {
 
     private void saveToMemory(String file, String format) throws IOException {
         List<FileLineModel> statisticFromFile = getStatisticFromFile(new FileModel(file));
-        storage.getInMemoryStorage().put(file, statisticFromFile);
+        InMemoryStatisticStorage.getInMemoryStorage().put(file, statisticFromFile);
         System.out.println(format);
     }
 

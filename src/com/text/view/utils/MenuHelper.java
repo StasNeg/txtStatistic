@@ -1,6 +1,8 @@
-package com.text.view;
+package com.text.view.utils;
 
 import com.text.service.ProcessingServise;
+import com.text.view.ViewServise;
+import com.text.view.item.MenuItem;
 
 import java.util.List;
 import java.util.Map;
